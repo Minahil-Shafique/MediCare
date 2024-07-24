@@ -1,26 +1,25 @@
 "use client";
 import React from "react";
 import {
-  Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { FormFieldType } from "./forms/PatientForm";
 import { Control } from "react-hook-form";
 import Image from "next/image";
-import 'react-phone-number-input/style.css'
-import PhoneInput from 'react-phone-number-input'
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
+import { FormFieldType } from "@/config/enums";
 
 // Define the CustomProps interface for the props that CustomFormField will accept
 interface CustomProps {
   control: Control<any>;
   name: string;
   label?: string;
+  type?: string;
   placeholder?: string;
   iconSrc?: string;
   iconAlt?: string;
@@ -32,19 +31,16 @@ interface CustomProps {
   fieldType: FormFieldType;
 }
 
-// Define an enum for different form field types
-export enum FormFieldType {
-  INPUT = "input",
-  TEXTAREA = "textarea",
-  PHONE_INPUT = "phoneInput",
-  CHECKBOX = "checkbox",
-  DATE_PICKER = "datePicker",
-  SELECT = "select",
-  SKELETON = "skeleton",
+import { E164Number } from "libphonenumber-js/core";
+
+interface RenderFieldProps {
+  field: any;
+  props: CustomProps;
+  type: string;
 }
 
-// Component to render different types of form fields
-const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
+// Define an enum for different form field types
+const RenderField = ({ field, props, type }: RenderFieldProps) => {
   const { fieldType, iconSrc, iconAlt, placeholder } = props;
   switch (fieldType) {
     case FormFieldType.INPUT:
@@ -52,7 +48,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
         <div className="flex rounded-md border border-dark-500 bg-dark-400">
           {props.iconSrc && (
             <Image
-              src={iconSrc}
+              src={`${iconSrc}`}
               height={24}
               width={24}
               alt={iconAlt || "icon"}
@@ -62,6 +58,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
           <FormControl>
             <Input
               placeholder={placeholder}
+              type={type ? type : "text"}
               {...field}
               className="shad-input border-0"
             />
@@ -90,7 +87,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
 
 // Main component to render a custom form field
 const CustomFormField = (props: CustomProps) => {
-  const { control, fieldType, name, label } = props;
+  const { control, fieldType, name, label, type } = props;
   return (
     <FormField
       control={control}
@@ -100,7 +97,7 @@ const CustomFormField = (props: CustomProps) => {
           {fieldType !== FormFieldType.CHECKBOX && label && (
             <FormLabel className="shad-input-label">{label}</FormLabel>
           )}
-          <RenderField field={field} props={props} />
+          <RenderField field={field} props={props} type={type} />
           <FormMessage className="shad-error" />
         </FormItem>
       )}
