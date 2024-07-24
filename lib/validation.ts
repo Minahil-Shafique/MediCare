@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+// @Authentication
 export const UserFormValidation = z.object({
   name: z
     .string()
@@ -9,6 +10,18 @@ export const UserFormValidation = z.object({
   phone: z
     .string()
     .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
+});
+
+export const UserLoginValidation = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(26, "Name must be at most 26 characters"),
+});
+
+export const OTPValidation = z.object({
+  otp: z.string().min(6, "Please enter all 6 digits"),
 });
 
 export const PatientFormValidation = z.object({

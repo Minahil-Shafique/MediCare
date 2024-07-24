@@ -5,17 +5,14 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { UserFormValidation } from "@/lib/validation";
-import CustomFormField from "../CustomFormField";
-import SubmitButton from "../ui/SubmitButton";
+import CustomFormField from "../../signup/components/FormField";
+import SubmitButton from "../../../../components/ui/SubmitButton";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Saira_Extra_Condensed } from "next/font/google";
 import router from "next/router";
 import { z } from "zod";
-
-export enum FormFieldType {
-  INPUT = "input",
-}
+import { FormFieldType } from "@/config/enums";
 
 export function PatientForm() {
   const [isLoading, setIsLoading] = useState(false);
